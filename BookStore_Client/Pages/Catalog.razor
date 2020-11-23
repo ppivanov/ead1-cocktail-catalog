@@ -1,0 +1,65 @@
+@page "/catalog"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+<h1>ABC</h1>
+
+@if (string.IsNullOrEmpty(randomJoke))
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>@randomJoke</p>
+    @for (int i = 65; i <= 90; i++)
+    {
+        int tempIndex = i;
+        <p @onclick="(() => FilterByCharacter(tempIndex))">@GetChar(i)</p>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Drink</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var drink in cocktailDrinks)
+            {
+                <tr>
+                    <td><img src="@drink.StrDrinkThumb" /></td>
+                    <td>@drink.StrDrink</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private string randomJoke = "";
+
+    private List<CocktailDrinks> cocktailDrinks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>("https://api.icndb.com/jokes/random");
+        randomJoke = jokeResponse.Value.Joke;
+
+
+        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail");
+        cocktailDrinks = cocktailResponse.Drinks.ToList();
+    }
+
+    private async Task FilterByCharacter(int firstCharacterAsInt)
+    {
+        char firstCharacter = GetChar(firstCharacterAsInt);
+        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"https://www.thecocktaildb.com/api/json/v1/1/search.php?f={firstCharacter}");
+        cocktailDrinks = cocktailResponse.Drinks.ToList();
+    }
+
+    private char GetChar(int i)
+    {
+        return (char)i;
+    }
+}
