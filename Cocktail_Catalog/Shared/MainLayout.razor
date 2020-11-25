@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavManager
 
 <div class="sidebar">
     <NavMenu />
@@ -6,6 +7,8 @@
 
 <div class="main">
     <div class="top-row px-4">
+        <input type="text" @bind-value="searchString" />
+        <input type="button" value="Search" @onclick="@RedirectToCatalog" />
         <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
     </div>
 
@@ -13,3 +16,12 @@
         @Body
     </div>
 </div>
+
+@code{
+    private string searchString;
+
+    private void RedirectToCatalog()
+    {
+        NavManager.NavigateTo("/catalog/" + searchString);
+    }
+}

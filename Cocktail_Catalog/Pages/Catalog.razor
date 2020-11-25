@@ -1,8 +1,9 @@
 @page "/catalog"
+@page "/catalog/{searchString}"
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 
-<h1>ABC</h1>
+<h1>Catalog</h1>
 
 @if (string.IsNullOrEmpty(randomJoke))
 {
@@ -10,52 +11,100 @@
 }
 else
 {
-    <p>@randomJoke</p>
-    @for (int i = 65; i <= 90; i++)
+    <p>@WebUtility.HtmlDecode(randomJoke)</p>
+    <div class="pagination">
+        @for (int i = 65; i <= 90; i++)
+        {
+            int tempIndex = i;
+            <a @onclick="(() => FilterByCharacter(tempIndex))">@GetChar(i)</a>
+        }
+    </div>
+    if (cocktailDrinks.Count == 0)
     {
-        int tempIndex = i;
-        <p @onclick="(() => FilterByCharacter(tempIndex))">@GetChar(i)</p>
+        <p>Sorry, no drinks match your search</p>
     }
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Drink</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var drink in cocktailDrinks)
-            {
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td><img src="@drink.StrDrinkThumb" /></td>
-                    <td>@drink.StrDrink</td>
+                    <th>Image</th>
+                    <th>Drink</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var drink in cocktailDrinks)
+                {
+                    <tr>
+                        <td class="col-3"><img src="@drink.StrDrinkThumb" class="w-100" /></td>
+                        <td>@drink.StrDrink</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
 }
 
 @code {
 
+    [Parameter]
+    public string SearchString { get; set; }
     private string randomJoke = "";
 
-    private List<CocktailDrinks> cocktailDrinks;
+    private List<CocktailDrinks> cocktailDrinks = new List<CocktailDrinks>();
+
+    const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
 
     protected override async Task OnInitializedAsync()
     {
+        await GetRandomNorrisJoke();
+        await UpdateCatalog();
+    }
+
+    protected override async void OnParametersSet() {
+        await UpdateCatalog();
+    }
+
+    private async Task GetRandomNorrisJoke()
+    {
         var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>("https://api.icndb.com/jokes/random");
         randomJoke = jokeResponse.Value.Joke;
+    }
 
 
-        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail");
-        cocktailDrinks = cocktailResponse.Drinks.ToList();
+    private async Task UpdateCatalog()
+    {
+        try
+        {
+            string endpoint = string.IsNullOrEmpty(SearchString) ? "filter.php?c=Cocktail" : $"search.php?s={SearchString}";
+            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}{endpoint}");
+            cocktailDrinks = cocktailResponse.Drinks.ToList();
+        }
+        catch (Exception)
+        {
+            cocktailDrinks = new List<CocktailDrinks>();
+        }
+
+        await InvokeAsync(() =>
+        {
+
+            StateHasChanged();
+        });
     }
 
     private async Task FilterByCharacter(int firstCharacterAsInt)
     {
         char firstCharacter = GetChar(firstCharacterAsInt);
-        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"https://www.thecocktaildb.com/api/json/v1/1/search.php?f={firstCharacter}");
-        cocktailDrinks = cocktailResponse.Drinks.ToList();
+        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}search.php?f={firstCharacter}");
+        try
+        {
+            cocktailDrinks = cocktailResponse.Drinks.ToList();
+        }
+        catch (Exception)
+        {
+            cocktailDrinks = new List<CocktailDrinks>();
+        }
     }
 
     private char GetChar(int i)
