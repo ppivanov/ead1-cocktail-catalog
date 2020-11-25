@@ -200,3 +200,17 @@ app {
             background-color: darkgrey;
             cursor: pointer;
         }
+
+.details-image {
+    height: auto;
+    max-width: 40em;
+    max-height: 40em;
+}
+
+.ingredients {
+    margin-top: 4em;
+}
+
+    .ingredients > h4 {
+        border-bottom: 1px solid gray;
+    }

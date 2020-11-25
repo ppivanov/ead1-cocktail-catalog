@@ -1,0 +1,71 @@
+﻿@page "/drink/{id}"
+@inject HttpClient Http
+
+<div class="drink-details container">
+    <div class="row">
+    <h3 class="col">CocktailDetails</h3>
+
+    </div>
+    @if (drink == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                <img src="@drink.StrDrinkThumb"
+                     class="details-image" />
+            </div>
+            <div class="col">
+                <div class="row">
+                    <h3 class="col">@drink.StrDrink</h3>
+                </div>
+
+                <div class="row">
+                    <div class="ingredients col
+                    ">
+                        <h4 class="col-4">Ingredients</h4>
+                        @foreach (var ingredient in drink.Ingredients)
+                        {
+                            <p>@ingredient.Ingredient (@ingredient.Measure)</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private CocktailDrink drink { get; set; }
+
+    const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCocktailDetails();
+    }
+
+    private async Task GetCocktailDetails()
+    {
+        try
+        {
+            string endpoint = $"lookup.php?i={Id}";
+            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}{endpoint}");
+            drink = cocktailResponse.Drinks[0];
+        }
+        catch (Exception)
+        {
+            drink = null;
+        }
+
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+}

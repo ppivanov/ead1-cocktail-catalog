@@ -1,7 +1,7 @@
 @page "/catalog"
 @page "/catalog/{searchString}"
 @inject HttpClient Http
-@inject IJSRuntime JSRuntime
+@inject NavigationManager NavManager
 
 <h1>Catalog</h1>
 
@@ -35,7 +35,7 @@ else
             <tbody>
                 @foreach (var drink in cocktailDrinks)
                 {
-                    <tr>
+                    <tr @onclick="(() => RedirectToCocktailDetails(drink.IdDrink))">
                         <td class="col-3"><img src="@drink.StrDrinkThumb" class="w-100" /></td>
                         <td>@drink.StrDrink</td>
                     </tr>
@@ -52,7 +52,7 @@ else
     public string SearchString { get; set; }
     private string randomJoke = "";
 
-    private List<CocktailDrinks> cocktailDrinks = new List<CocktailDrinks>();
+    private List<CocktailDrink> cocktailDrinks = new List<CocktailDrink>();
 
     const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
 
@@ -62,7 +62,8 @@ else
         await UpdateCatalog();
     }
 
-    protected override async void OnParametersSet() {
+    protected override async void OnParametersSet()
+    {
         await UpdateCatalog();
     }
 
@@ -83,12 +84,11 @@ else
         }
         catch (Exception)
         {
-            cocktailDrinks = new List<CocktailDrinks>();
+            cocktailDrinks = new List<CocktailDrink>();
         }
 
         await InvokeAsync(() =>
         {
-
             StateHasChanged();
         });
     }
@@ -103,8 +103,13 @@ else
         }
         catch (Exception)
         {
-            cocktailDrinks = new List<CocktailDrinks>();
+            cocktailDrinks = new List<CocktailDrink>();
         }
+    }
+
+    private void RedirectToCocktailDetails(string id)
+    {
+        NavManager.NavigateTo($"/drink/{id}");
     }
 
     private char GetChar(int i)

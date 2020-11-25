@@ -7,7 +7,7 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <input type="text" @bind-value="searchString" />
+        <input type="text" @bind-value="searchString" @onkeyup="@KeyUp" />
         <input type="button" value="Search" @onclick="@RedirectToCatalog" />
         <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
     </div>
@@ -22,6 +22,14 @@
 
     private void RedirectToCatalog()
     {
-        NavManager.NavigateTo("/catalog/" + searchString);
+        NavManager.NavigateTo($"/catalog/{searchString}");
+    }
+
+    private void KeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            RedirectToCatalog();
+        }
     }
 }

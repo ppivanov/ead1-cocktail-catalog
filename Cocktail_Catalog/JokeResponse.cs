@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Cocktail_Catalog
+﻿namespace Cocktail_Catalog
 {
     public class ChuckNorrisJokeResponse
     {
