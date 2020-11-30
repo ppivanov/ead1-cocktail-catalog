@@ -1,6 +1,32 @@
 ﻿@page "/"
+@inject HttpClient Http
 
 <h1>EAD1 CA3 - Blazor WASM Client</h1>
 
 <p>This application consumes the <a href="https://www.thecocktaildb.com/api.php"><strong>TheCocktailDB</strong></a></p>
+
+@if (string.IsNullOrEmpty(randomJoke))
+{
+    <p><em>Loading joke...</em></p>
+}
+else
+{
+    <p>@WebUtility.HtmlDecode(randomJoke)</p>
+}
+
+@code
+{
+    private string randomJoke = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRandomNorrisJoke();
+    }
+
+    private async Task GetRandomNorrisJoke()
+    {
+        var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>("https://api.icndb.com/jokes/random");
+        randomJoke = jokeResponse.Value.Joke;
+    }
+}
 

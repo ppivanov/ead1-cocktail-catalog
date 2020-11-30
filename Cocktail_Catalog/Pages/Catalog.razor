@@ -5,13 +5,13 @@
 
 <h1>Catalog</h1>
 
-@if (string.IsNullOrEmpty(randomJoke))
+@if (cocktailDrinks == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <p>@WebUtility.HtmlDecode(randomJoke)</p>
+    
     <div class="pagination">
         @for (int i = 65; i <= 90; i++)
         {
@@ -50,29 +50,22 @@ else
 
     [Parameter]
     public string SearchString { get; set; }
-    private string randomJoke = "";
 
-    private List<CocktailDrink> cocktailDrinks = new List<CocktailDrink>();
+
+    private List<CocktailDrink> cocktailDrinks;
 
     const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
 
     protected override async Task OnInitializedAsync()
     {
-        await GetRandomNorrisJoke();
         await UpdateCatalog();
+        cocktailDrinks = new List<CocktailDrink>();
     }
 
     protected override async void OnParametersSet()
     {
         await UpdateCatalog();
     }
-
-    private async Task GetRandomNorrisJoke()
-    {
-        var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>("https://api.icndb.com/jokes/random");
-        randomJoke = jokeResponse.Value.Joke;
-    }
-
 
     private async Task UpdateCatalog()
     {
