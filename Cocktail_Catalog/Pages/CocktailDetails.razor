@@ -41,12 +41,14 @@
     [Parameter]
     public string Id { get; set; }
 
+    private string CocktailDbUrl { get; set; }
     private CocktailDrink drink { get; set; }
 
-    const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
 
     protected override async Task OnInitializedAsync()
     {
+        var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
+        CocktailDbUrl = config.BaseURLs.CocktailDb;
         await GetCocktailDetails();
     }
 
@@ -55,7 +57,7 @@
         try
         {
             string endpoint = $"lookup.php?i={Id}";
-            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}{endpoint}");
+            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{CocktailDbUrl}/{endpoint}");
             drink = cocktailResponse.Drinks[0];
         }
         catch (Exception)

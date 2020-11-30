@@ -35,7 +35,7 @@ else
             <tbody>
                 @foreach (var drink in cocktailDrinks)
                 {
-                    <tr @onclick="(() => RedirectToCocktailDetails(drink.IdDrink))">
+                    <tr class="cursor-pointer" @onclick="(() => RedirectToCocktailDetails(drink.IdDrink))">
                         <td class="col-3"><img src="@drink.StrDrinkThumb" class="w-100" /></td>
                         <td>@drink.StrDrink</td>
                     </tr>
@@ -50,14 +50,15 @@ else
 
     [Parameter]
     public string SearchString { get; set; }
-
-
+  
+    private string CocktailDbUrl { get; set; }
     private List<CocktailDrink> cocktailDrinks;
-
-    const string baseCocktailDbUrl = "https://www.thecocktaildb.com/api/json/v1/1/";
 
     protected override async Task OnInitializedAsync()
     {
+        var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
+        CocktailDbUrl = config.BaseURLs.CocktailDb;
+
         await UpdateCatalog();
         cocktailDrinks = new List<CocktailDrink>();
     }
@@ -72,7 +73,7 @@ else
         try
         {
             string endpoint = string.IsNullOrEmpty(SearchString) ? "filter.php?c=Cocktail" : $"search.php?s={SearchString}";
-            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}{endpoint}");
+            var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{CocktailDbUrl}/{endpoint}");
             cocktailDrinks = cocktailResponse.Drinks.ToList();
         }
         catch (Exception)
@@ -89,7 +90,7 @@ else
     private async Task FilterByCharacter(int firstCharacterAsInt)
     {
         char firstCharacter = GetChar(firstCharacterAsInt);
-        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{baseCocktailDbUrl}search.php?f={firstCharacter}");
+        var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{CocktailDbUrl}/search.php?f={firstCharacter}");
         try
         {
             cocktailDrinks = cocktailResponse.Drinks.ToList();

@@ -214,3 +214,8 @@ app {
     .ingredients > h4 {
         border-bottom: 1px solid gray;
     }
+
+.cursor-pointer:hover {
+    cursor: pointer;
+    background-color: #ddd;
+}

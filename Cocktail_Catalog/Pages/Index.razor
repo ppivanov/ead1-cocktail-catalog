@@ -17,16 +17,19 @@ else
 @code
 {
     private string randomJoke = "";
+    private string JokeDbUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
+        JokeDbUrl = config.BaseURLs.JokeDb;
+
         await GetRandomNorrisJoke();
     }
 
     private async Task GetRandomNorrisJoke()
     {
-        var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>("https://api.icndb.com/jokes/random");
+        var jokeResponse = await Http.GetFromJsonAsync<ChuckNorrisJokeResponse>($"{JokeDbUrl}/random");
         randomJoke = jokeResponse.Value.Joke;
     }
 }
-
