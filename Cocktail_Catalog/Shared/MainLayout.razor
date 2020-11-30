@@ -1,5 +1,8 @@
 ﻿@inherits LayoutComponentBase
+
 @inject NavigationManager NavManager
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 
 <div class="sidebar">
     <NavMenu />
@@ -9,6 +12,7 @@
     <div class="top-row px-4">
         <input type="text" @bind-value="searchString" @onkeyup="@KeyUp" />
         <input type="button" value="Search" @onclick="@RedirectToCatalog" />
+        <a href="@(Configuration.GetValue<string>("CocktailDbAbout"))" target="_blank" class="ml-md-auto">About</a>
     </div>
 
     <div class="content px-4">
