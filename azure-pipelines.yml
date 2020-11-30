@@ -47,7 +47,7 @@ stages:
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
-        azureSubscription: 'Azure for Students(3c7c2ff0-247b-475b-b3ec-932545c61100)'
+        azureSubscription: 'Azure for Students(1)(3c7c2ff0-247b-475b-b3ec-932545c61100)'
         appType: 'webApp'
         WebAppName: 'cocktail-catalog'
         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
