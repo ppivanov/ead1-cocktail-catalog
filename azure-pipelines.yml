@@ -27,27 +27,3 @@ stages:
       inputs:
         command: 'test'
         projects: '**/Cocktail_CatalogTests.csproj'
-
-- stage: Release  
-  displayName: Release stage
-
-  jobs:
-  - job: Release
-    displayName: Release to Azure
-
-    pool:
-        vmImage: $(vmImageName)
-    steps:
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/Cocktail_Catalog.csproj'
-        
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Azure for Students(1)(3c7c2ff0-247b-475b-b3ec-932545c61100)'
-        appType: 'webApp'
-        WebAppName: 'cocktail-catalog'
-        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
