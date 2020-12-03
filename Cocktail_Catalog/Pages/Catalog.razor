@@ -11,6 +11,7 @@
 }
 else
 {
+    
     <div class="pagination">
         @for (int i = 65; i <= 90; i++)
         {
@@ -58,8 +59,8 @@ else
         var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
         CocktailDbUrl = config.BaseURLs.CocktailDb;
 
-        cocktailDrinks = new List<CocktailDrink>();
         await UpdateCatalog();
+        cocktailDrinks = new List<CocktailDrink>();
     }
 
     protected override async void OnParametersSet()
@@ -72,7 +73,6 @@ else
         try
         {
             string endpoint = string.IsNullOrEmpty(SearchString) ? "filter.php?c=Cocktail" : $"search.php?s={SearchString}";
-
             var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{CocktailDbUrl}/{endpoint}");
             cocktailDrinks = cocktailResponse.Drinks.ToList();
         }
