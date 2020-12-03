@@ -11,7 +11,6 @@
 }
 else
 {
-    
     <div class="pagination">
         @for (int i = 65; i <= 90; i++)
         {
@@ -25,7 +24,7 @@ else
     }
     else
     {
-        <table class="table">
+        <table class="table col-8 m-auto">
             <thead>
                 <tr>
                     <th>Image</th>
@@ -43,7 +42,6 @@ else
             </tbody>
         </table>
     }
-
 }
 
 @code {
@@ -59,12 +57,7 @@ else
         var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
         CocktailDbUrl = config.BaseURLs.CocktailDb;
 
-        await UpdateCatalog();
         cocktailDrinks = new List<CocktailDrink>();
-    }
-
-    protected override async void OnParametersSet()
-    {
         await UpdateCatalog();
     }
 

@@ -44,7 +44,6 @@
     private string CocktailDbUrl { get; set; }
     private CocktailDrink drink { get; set; }
 
-
     protected override async Task OnInitializedAsync()
     {
         var config = await Http.GetFromJsonAsync<Settings>("appsettings.json");
