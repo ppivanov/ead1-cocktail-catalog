@@ -42,6 +42,7 @@ else
             </tbody>
         </table>
     }
+
 }
 
 @code {
@@ -58,6 +59,11 @@ else
         CocktailDbUrl = config.BaseURLs.CocktailDb;
 
         cocktailDrinks = new List<CocktailDrink>();
+        await UpdateCatalog();
+    }
+
+    protected override async void OnParametersSet()
+    {
         await UpdateCatalog();
     }
 
