@@ -17,6 +17,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_OneIngredients_OneListElements()
         {
@@ -30,6 +31,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_TwoIngredients_TwoListElements()
         {
@@ -44,6 +46,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_ThreeIngredients_ThreeListElements()
         {
@@ -59,6 +62,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_FourIngredients_FourListElements()
         {
@@ -93,6 +97,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_SixIngredients_SixListElements()
         {
@@ -111,6 +116,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_SevenIngredients_SevenListElements()
         {
@@ -130,6 +136,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_EightIngredients_EightListElements()
         {
@@ -150,6 +157,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_NineIngredients_NineListElements()
         {
@@ -171,6 +179,7 @@ namespace Cocktail_Catalog.Tests
 
             Assert.AreEqual(expectedElementCount, actualElementCount);
         }
+
         [TestMethod()]
         public void IgredientsList_TenIngredients_TenListElements()
         {
