@@ -63,7 +63,7 @@
         get
         {
             StringBuilder title = new StringBuilder(drink.StrDrink);
-            if(!string.IsNullOrEmpty(drink.StrAlcoholic))
+            if (!string.IsNullOrEmpty(drink.StrAlcoholic))
             {
                 title.Append($" ({drink.StrAlcoholic})");
             }
@@ -93,8 +93,9 @@
         }
 
         await InvokeAsync(() =>
-        {
-            StateHasChanged();
-        });
+            {
+                StateHasChanged();
+            }
+        );
     }
 }

@@ -14,8 +14,8 @@ else
     <div class="pagination">
         @for (int i = 65; i <= 90; i++)
         {
-            int tempIndex = i;
-            <a @onclick="(() => FilterByCharacter(tempIndex))">@GetChar(i)</a>
+            char loopCharacter = (char)i;
+            <a @onclick="(() => FilterByCharacter(loopCharacter))">@loopCharacter</a>
         }
     </div>
     if (cocktailDrinks.Count == 0)
@@ -42,14 +42,12 @@ else
             </tbody>
         </table>
     }
-
 }
 
 @code {
-
     [Parameter]
     public string SearchString { get; set; }
-  
+
     private string CocktailDbUrl { get; set; }
     private List<CocktailDrink> cocktailDrinks;
 
@@ -86,9 +84,8 @@ else
         });
     }
 
-    private async Task FilterByCharacter(int firstCharacterAsInt)
+    private async Task FilterByCharacter(char firstCharacter)
     {
-        char firstCharacter = GetChar(firstCharacterAsInt);
         var cocktailResponse = await Http.GetFromJsonAsync<CocktailDbResponse>($"{CocktailDbUrl}/search.php?f={firstCharacter}");
         try
         {
@@ -103,10 +100,5 @@ else
     private void RedirectToCocktailDetails(string id)
     {
         NavManager.NavigateTo($"/drink/{id}");
-    }
-
-    private char GetChar(int i)
-    {
-        return (char)i;
     }
 }
