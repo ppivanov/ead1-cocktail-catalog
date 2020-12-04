@@ -3,7 +3,7 @@
 
 <div class="drink-details container">
     <div class="row">
-    <h3 class="col">Cocktail Details</h3>
+        <h3 class="col">Cocktail Details</h3>
 
     </div>
     @if (drink == null)
@@ -13,18 +13,23 @@
     else
     {
         <div class="row">
-            <div class="col">
+            <div class="col-5">
                 <img src="@drink.StrDrinkThumb"
                      class="details-image" />
             </div>
-            <div class="col">
+            <div class="col-7">
                 <div class="row">
-                    <h3 class="col">@drink.StrDrink</h3>
+                    <h3 class="col">@Title</h3>
                 </div>
+                @if (drink.StrGlass != null)
+                {
+                    <div class="row">
+                        <p class="col">Glass: @drink.StrGlass</p>
+                    </div>
 
+                }
                 <div class="row">
-                    <div class="ingredients col
-                    ">
+                    <div class="ingredients col">
                         <h4 class="col-4">Ingredients</h4>
                         @foreach (var ingredient in drink.Ingredients)
                         {
@@ -32,6 +37,15 @@
                         }
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3>Instructions</h3>
+                <hr />
+                <p>
+                    @drink.StrInstructions
+                </p>
             </div>
         </div>
     }
@@ -43,6 +57,20 @@
 
     private string CocktailDbUrl { get; set; }
     private CocktailDrink drink { get; set; }
+
+    private string Title
+    {
+        get
+        {
+            StringBuilder title = new StringBuilder(drink.StrDrink);
+            if(!string.IsNullOrEmpty(drink.StrAlcoholic))
+            {
+                title.Append($" ({drink.StrAlcoholic})");
+            }
+
+            return title.ToString();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

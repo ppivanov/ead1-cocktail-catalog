@@ -11,7 +11,7 @@ namespace Cocktail_Catalog
     {
         public string IdDrink { get; set; }
         public string StrDrink { get; set; }
-        public string StrAlchoholic { get; set; }
+        public string StrAlcoholic { get; set; }
         public string StrGlass { get; set; }
         public string StrInstructions { get; set; }
         public string StrDrinkThumb { get; set; }
