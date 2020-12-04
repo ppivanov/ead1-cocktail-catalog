@@ -121,7 +121,7 @@ namespace Cocktail_Catalog
 
             return ingredients;
         }
-        private void AddIngredientAndMeasure(List<IngredientAndMeasure> list, string ingredient, string measure)
+        private static void AddIngredientAndMeasure(List<IngredientAndMeasure> list, string ingredient, string measure)
         {
             list.Add(new IngredientAndMeasure
             {
